@@ -1,0 +1,8 @@
+version: '2.1'
+
+services:
+  docker_with_vsc:
+    image: docker_with_vsc
+    build: .
+    ports:
+      - 8080:8080

@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  docker_with_vsc:
+    image: docker_with_vsc
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
