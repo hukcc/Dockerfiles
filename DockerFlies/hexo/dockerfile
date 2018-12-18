@@ -1,0 +1,49 @@
+# Docker file for Hexo 3
+FROM ubuntu:16.04
+#RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak && \
+RUN \
+    echo "deb-src http://archive.ubuntu.com/ubuntu xenial main restricted" >/etc/apt/sources.list && \
+    echo "deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted" >>/etc/apt/sources.list && \
+    echo "deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted multiverse universe" >>/etc/apt/sources.list && \
+    echo "deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted" >>/etc/apt/sources.list && \
+    echo "deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted multiverse universe" >>/etc/apt/sources.list && \
+    echo "deb http://mirrors.aliyun.com/ubuntu/ xenial universe" >>/etc/apt/sources.list && \
+    echo "deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe" >>/etc/apt/sources.list && \
+    echo "deb http://mirrors.aliyun.com/ubuntu/ xenial multiverse" >>/etc/apt/sources.list && \
+    echo "deb http://mirrors.aliyun.com/ubuntu/ xenial-updates multiverse" >>/etc/apt/sources.list && \
+    echo "deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse" >>/etc/apt/sources.list && \
+    echo "deb-src http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse" >>/etc/apt/sources.list && \
+    echo "deb http://archive.canonical.com/ubuntu xenial partner" >>/etc/apt/sources.list && \
+    echo "deb-src http://archive.canonical.com/ubuntu xenial partner" >>/etc/apt/sources.list && \
+    echo "deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted" >>/etc/apt/sources.list && \
+    echo "deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted multiverse universe" >>/etc/apt/sources.list && \
+    echo "deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe" >>/etc/apt/sources.list && \
+    echo "deb http://mirrors.aliyun.com/ubuntu/ xenial-security multiverse" >>/etc/apt/sources.list
+RUN  apt-get update
+RUN  apt-get upgrade -y
+
+#RUN apt-get install -y  perl-modules liberror-perl
+RUN apt-get install -y git curl wget build-essential
+RUN curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh
+RUN bash nodesource_setup.sh
+RUN apt-get install -y nodejs
+
+RUN npm install -g hexo-cli
+
+EXPOSE 4000
+
+
+RUN wget -P /soft https://vscode.cdn.azure.cn/stable/c6e592b2b5770e40a98cb9c2715a8ef89aec3d74/code_1.30.0-1544567151_amd64.deb
+
+RUN apt-get install -y acl adwaita-icon-theme at-spi2-core colord colord-data dconf-gsettings-backend dconf-service gconf-service libasound-dev gconf-service-backend gconf2-common glib-networking glib-networking-common glib-networking-services gsettings-desktop-schemas humanity-icon-theme  libatk-bridge2.0-0 libatspi2.0-0 libboost-filesystem1.58.0  libboost-system1.58.0 libcapnp-0.5.3 libcolord2 libcolorhug2  libdbus-glib-1-2 libdconf1 libegl1-mesa libepoxy0 libexif12 libgbm1  libgconf-2-4 libgd3 libgl1-mesa-dri libglapi-mesa libgphoto2-6  libgphoto2-l10n libgphoto2-port12 libgtk-3-0 libgtk-3-bin libgtk-3-common  libgudev-1.0-0 libgusb2 libieee1284-3 libjson-glib-1.0-0  libjson-glib-1.0-common liblcms2-2 libltdl7 libmirclient9 libmircommon7  libmircore1 libmirprotobuf3 libnotify4 libnspr4 libnss3 libnss3-nssdb  libpam-systemd libpolkit-agent-1-0 libpolkit-backend-1-0  libpolkit-gobject-1-0 libprotobuf-lite9v5 libproxy1v5 librest-0.7-0  librsvg2-2 librsvg2-common libsane libsane-common libsecret-1-0  libsecret-common libsoup-gnome2.4-1 libsoup2.4-1 libtxc-dxtn-s2tc0  libusb-1.0-0 libwayland-client0 libwayland-cursor0 libwayland-egl1-mesa  libwayland-server0 libxkbcommon0 libxkbfile1 libxpm4 libxss1 libxtst6  notification-daemon policykit-1 ubuntu-mono xkb-data
+
+RUN cd /soft && dpkg -i code_1.30.0-1544567151_amd64.deb
+
+
+#USER hukcc
+RUN useradd --create-home --no-log-init --shell /bin/bash hukcc
+RUN adduser hukcc sudo
+RUN echo 'hukcc:123' | chpasswd
+USER hukcc
+
+CMD ['/bin/bash']
