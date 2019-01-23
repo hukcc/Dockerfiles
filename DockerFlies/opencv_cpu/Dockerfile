@@ -35,6 +35,22 @@ RUN apt-get install -y acl adwaita-icon-theme at-spi2-core colord colord-data dc
 
 RUN cd /soft && dpkg -i code_1.30.0-1544567151_amd64.deb
 
+# 配置中文语言
+
+ENV LANG zh_CN.UTF-8
+ENV LANGUAGE zh_CN.UTF-8
+ENV LC_ALL=zh_CN.UTF-8
+RUN apt-get -y install language-pack-zh-hans language-pack-zh-hans-base
+RUN locale
+RUN apt-get -qqy --no-install-recommends install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable
+
+
+# 安装文泉驿微米黑字体
+RUN apt-get -qqy --no-install-recommends install ttf-wqy-microhei
+
+
+# 将文泉驿微米黑设置为系统默认字体
+RUN ln /etc/fonts/conf.d/65-wqy-microhei.conf /etc/fonts/conf.d/69-language-selector-zh-cn.conf
 #USER hukcc
 RUN useradd --create-home --no-log-init --shell /bin/bash hukcc
 RUN adduser hukcc sudo
